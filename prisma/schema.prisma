@@ -1,23 +1,22 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // or "postgresql", etc.
+  provider = "mysql"
 }
 
 model Song {
-  id        Int       @id
-  artist    String
-  title     String
-  year      Int
+  id     Int    @id
+  artist String
+  title  String
+  year   Int
 
   voteItems VoteItem[]
 }
 
 model Vote {
-  id              String   @id @default(cuid())
+  id String @id @default(cuid())
 
   email           String
   emailNormalized String
@@ -25,27 +24,27 @@ model Vote {
   city            String
   zipcode         String
 
-  country         Country
-  otherCountry    String?
+  country      Country
+  otherCountry String?
 
-  ipHash          String
-  createdAt       DateTime @default(now())
+  ipHash    String
+  createdAt DateTime @default(now())
 
-  voteItems       VoteItem[]
+  voteItems VoteItem[]
 
   @@unique([emailNormalized])
   @@index([ipHash])
 }
 
 model VoteItem {
-  id      String @id @default(cuid())
+  id String @id @default(cuid())
 
-  voteId  String
-  songId  Int
-  points  Int
+  voteId String
+  songId Int
+  points Int
 
-  vote    Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)
-  song    Song @relation(fields: [songId], references: [id])
+  vote Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  song Song @relation(fields: [songId], references: [id])
 
   @@unique([voteId, songId])
 }
