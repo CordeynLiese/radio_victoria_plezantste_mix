@@ -1,14 +1,56 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/generated"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // or "postgresql", etc.
+}
+
+model Song {
+  id        Int       @id
+  artist    String
+  title     String
+  year      Int
+
+  voteItems VoteItem[]
+}
+
+model Vote {
+  id              String   @id @default(cuid())
+
+  email           String
+  emailNormalized String
+  name            String
+  city            String
+  zipcode         String
+
+  country         Country
+  otherCountry    String?
+
+  ipHash          String
+  createdAt       DateTime @default(now())
+
+  voteItems       VoteItem[]
+
+  @@unique([emailNormalized])
+  @@index([ipHash])
+}
+
+model VoteItem {
+  id      String @id @default(cuid())
+
+  voteId  String
+  songId  Int
+  points  Int
+
+  vote    Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  song    Song @relation(fields: [songId], references: [id])
+
+  @@unique([voteId, songId])
+}
+
+enum Country {
+  BELGIUM
+  OTHER
 }

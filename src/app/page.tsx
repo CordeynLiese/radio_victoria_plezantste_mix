@@ -1,7 +1,10 @@
+import { VoterForm } from "@/components/VoterFrom";
+import "./global.css";
+
 const HomePage = () => {
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-semibold">Voting App</h1>
+      <VoterForm />
     </main>
   );
 };
