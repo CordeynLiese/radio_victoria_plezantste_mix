@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Song {
+  id     Int    @id
+  artist String
+  title  String
+  year   Int
+
+  voteItems VoteItem[]
+}
+
+model Vote {
+  id String @id @default(cuid())
+
+  email           String
+  emailNormalized String
+  name            String
+  city            String
+  zipcode         String
+
+  country      Country
+  otherCountry String?
+
+  ipHash    String
+  createdAt DateTime @default(now())
+
+  voteItems VoteItem[]
+
+  @@unique([emailNormalized])
+  @@index([ipHash])
+}
+
+model VoteItem {
+  id String @id @default(cuid())
+
+  voteId String
+  songId Int
+  points Int
+
+  vote Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  song Song @relation(fields: [songId], references: [id])
+
+  @@unique([voteId, songId])
+}
+
+enum Country {
+  BELGIUM
+  OTHER
+}
