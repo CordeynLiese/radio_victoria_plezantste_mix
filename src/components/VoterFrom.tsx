@@ -9,11 +9,9 @@ import Confetti from "react-confetti";
 import { CircularProgress, Box } from "@mui/material";
 import { useWindowSize } from "react-use";
 
-type Song = {
-  id: number;
-  title: string;
+type Mix = {
+  id: string;
   artist: string;
-  year: number;
 };
 
 // Zod schema
@@ -25,14 +23,7 @@ const voteSchema = z
     postalCode: z.string().min(1, "Post code is verplicht"),
     countryType: z.enum(["BELGIUM", "OTHER"]),
     countryName: z.string().optional(),
-    rankings: z
-      .array(
-        z.object({
-          songId: z.number().min(1, "Selecteer een nummer"),
-          rank: z.number(),
-        }),
-      )
-      .length(5),
+    mixId: z.string().min(1, "Mix selectie is verplicht"),
   })
   .refine(
     (data) =>
@@ -42,18 +33,14 @@ const voteSchema = z
       message: "Land is verplicht",
       path: ["countryName"],
     },
-  )
-  .refine((data) => new Set(data.rankings.map((r) => r.songId)).size === 5, {
-    message: "Een nummer mag maar 1 keer geslecteerd worden",
-    path: ["rankings"],
-  });
+  );
 
 type FormData = z.infer<typeof voteSchema>;
 
 export const VoterForm = () => {
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [mixes, setMixes] = useState<Mix[]>([]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [isLoadingSongs, setIsLoadingSongs] = useState(true);
+  const [isLoadingMixes, setIsLoadingMixes] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -76,42 +63,40 @@ export const VoterForm = () => {
       postalCode: "",
       countryType: "BELGIUM",
       countryName: "",
-      rankings: Array.from({ length: 5 }, () => ({ songId: 0, rank: 0 })),
+      mixId: "",
     },
   });
-
-  const rankings = watch("rankings");
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Fetch songs from API
+  // Fetch mixes from API
   useEffect(() => {
-    const loadSongs = async () => {
+    const loadMixes = async () => {
       try {
-        const res = await fetch("/api/song", {
+        const res = await fetch("/api/mix", {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_API_SECRET_KEY!,
           },
         });
         const data = await res.json();
-        setSongs(data.songs);
+        setMixes(data.mixes);
       } catch (err) {
-        console.error("Failed to fetch songs:", err);
+        console.error("Failed to fetch mixes:", err);
       } finally {
-        setIsLoadingSongs(false);
+        setIsLoadingMixes(false);
       }
     };
 
-    loadSongs();
+    loadMixes();
   }, []);
 
   if (!isMounted) {
     return null;
   }
 
-  if (isLoadingSongs) {
+  if (isLoadingMixes) {
     return (
       <Box
         display="flex"
@@ -122,7 +107,7 @@ export const VoterForm = () => {
         gap={2}
       >
         <CircularProgress />
-        <span>Nummers worden geladen…</span>
+        <span>Mixes worden geladen…</span>
       </Box>
     );
   }
@@ -133,13 +118,13 @@ export const VoterForm = () => {
       setIsSubmitting(true);
 
       const payload = {
-        ...data,
+        name: data.name,
+        email: data.email,
+        city: data.city,
+        postalCode: data.postalCode,
         country: data.countryType,
         otherCountry: data.countryName,
-        rankings: data.rankings.map((r, i) => ({
-          songId: r.songId,
-          rank: i + 1,
-        })),
+        mixId: data.mixId,
       };
 
       const res = await fetch("/api/vote", {
@@ -156,7 +141,7 @@ export const VoterForm = () => {
         setError("root", {
           type: "server",
           message:
-            json.error.message ||
+            json.error?.message ||
             json.error ||
             "Er ging iets mis bij het verzenden van je stem",
         });
@@ -196,8 +181,7 @@ export const VoterForm = () => {
           <h2>🎉 Bedankt voor je stem! 🎉</h2>
           <p>
             We hebben je stem goed ontvangen! Benieuwd naar de winnaar? Ontdek
-            het tijdens de nacht van de carnaval top 100 in de Kazerne op 21/02
-            of tijdens de liveuitzending op 08/03
+            het tijdens de laatste Carnavalitis in Cafe Bidon
           </p>
         </Box>
       </>
@@ -309,53 +293,34 @@ export const VoterForm = () => {
           )}
         </Stack>
 
-        {/* Ranking dropdowns */}
-        <Stack spacing={2}>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <Controller
-              key={index}
-              name={`rankings.${index}.songId`}
-              control={control}
-              render={({ field }) => {
-                const selectedIds = rankings
-                  .map((r) => r.songId)
-                  .filter((id) => id !== 0 && id !== field.value);
-                const options = songs.filter(
-                  (s) => !selectedIds.includes(s.id),
-                );
-
-                return (
-                  <Autocomplete
-                    options={options.sort((a, b) => {
-                      const artistCompare = a.artist.localeCompare(b.artist);
-                      if (artistCompare !== 0) return artistCompare;
-                      return a.title.localeCompare(b.title);
-                    })}
-                    getOptionLabel={(option) =>
-                      `${option.artist} - ${option.title} (${option.year})`
-                    }
-                    value={options.find((s) => s.id === field.value) || null}
-                    onChange={(_, newValue) =>
-                      field.onChange(newValue?.id ?? 0)
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={`Keuze ${index + 1}`}
-                        error={!!errors.rankings?.[index]}
-                        helperText={errors.rankings?.[index]?.songId?.message}
-                        disabled={isSubmitting || submitSuccess}
-                        required
-                        fullWidth
-                      />
-                    )}
+        {/* Mix selection dropdown */}
+        <Controller
+          name="mixId"
+          control={control}
+          render={({ field }) => {
+            const selectedMix = mixes.find((m) => m.id === field.value);
+            return (
+              <Autocomplete
+                options={mixes.sort((a, b) => a.artist.localeCompare(b.artist))}
+                getOptionLabel={(option) => option.artist}
+                value={selectedMix || null}
+                onChange={(_, newValue) => field.onChange(newValue?.id ?? "")}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Selecteer een mix"
+                    error={!!errors.mixId}
+                    helperText={errors.mixId?.message}
                     disabled={isSubmitting || submitSuccess}
+                    required
+                    fullWidth
                   />
-                );
-              }}
-            />
-          ))}
-        </Stack>
+                )}
+                disabled={isSubmitting || submitSuccess}
+              />
+            );
+          }}
+        />
 
         {/* Error messages */}
         {errors.root?.message && (

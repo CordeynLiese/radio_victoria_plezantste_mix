@@ -8,7 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Song'
+export type * from './models/Mix'
 export type * from './models/Vote'
-export type * from './models/VoteItem'
 export type * from './commonInputTypes'

@@ -384,9 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Song: 'Song',
-  Vote: 'Vote',
-  VoteItem: 'VoteItem'
+  Mix: 'Mix',
+  Vote: 'Vote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,81 +401,81 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "song" | "vote" | "voteItem"
+    modelProps: "mix" | "vote"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    Song: {
-      payload: Prisma.$SongPayload<ExtArgs>
-      fields: Prisma.SongFieldRefs
+    Mix: {
+      payload: Prisma.$MixPayload<ExtArgs>
+      fields: Prisma.MixFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.SongFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload> | null
+          args: Prisma.MixFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.SongFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         findFirst: {
-          args: Prisma.SongFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload> | null
+          args: Prisma.MixFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.SongFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         findMany: {
-          args: Prisma.SongFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>[]
+          args: Prisma.MixFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>[]
         }
         create: {
-          args: Prisma.SongCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         createMany: {
-          args: Prisma.SongCreateManyArgs<ExtArgs>
+          args: Prisma.MixCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.SongCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>[]
+          args: Prisma.MixCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>[]
         }
         delete: {
-          args: Prisma.SongDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         update: {
-          args: Prisma.SongUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         deleteMany: {
-          args: Prisma.SongDeleteManyArgs<ExtArgs>
+          args: Prisma.MixDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.SongUpdateManyArgs<ExtArgs>
+          args: Prisma.MixUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.SongUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>[]
+          args: Prisma.MixUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>[]
         }
         upsert: {
-          args: Prisma.SongUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SongPayload>
+          args: Prisma.MixUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MixPayload>
         }
         aggregate: {
-          args: Prisma.SongAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSong>
+          args: Prisma.MixAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMix>
         }
         groupBy: {
-          args: Prisma.SongGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SongGroupByOutputType>[]
+          args: Prisma.MixGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MixGroupByOutputType>[]
         }
         count: {
-          args: Prisma.SongCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SongCountAggregateOutputType> | number
+          args: Prisma.MixCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MixCountAggregateOutputType> | number
         }
       }
     }
@@ -554,80 +553,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    VoteItem: {
-      payload: Prisma.$VoteItemPayload<ExtArgs>
-      fields: Prisma.VoteItemFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.VoteItemFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.VoteItemFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        findFirst: {
-          args: Prisma.VoteItemFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.VoteItemFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        findMany: {
-          args: Prisma.VoteItemFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>[]
-        }
-        create: {
-          args: Prisma.VoteItemCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        createMany: {
-          args: Prisma.VoteItemCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.VoteItemCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>[]
-        }
-        delete: {
-          args: Prisma.VoteItemDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        update: {
-          args: Prisma.VoteItemUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        deleteMany: {
-          args: Prisma.VoteItemDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.VoteItemUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.VoteItemUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>[]
-        }
-        upsert: {
-          args: Prisma.VoteItemUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoteItemPayload>
-        }
-        aggregate: {
-          args: Prisma.VoteItemAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateVoteItem>
-        }
-        groupBy: {
-          args: Prisma.VoteItemGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.VoteItemGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.VoteItemCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.VoteItemCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -667,14 +592,12 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const SongScalarFieldEnum = {
+export const MixScalarFieldEnum = {
   id: 'id',
-  artist: 'artist',
-  title: 'title',
-  year: 'year'
+  artist: 'artist'
 } as const
 
-export type SongScalarFieldEnum = (typeof SongScalarFieldEnum)[keyof typeof SongScalarFieldEnum]
+export type MixScalarFieldEnum = (typeof MixScalarFieldEnum)[keyof typeof MixScalarFieldEnum]
 
 
 export const VoteScalarFieldEnum = {
@@ -686,21 +609,12 @@ export const VoteScalarFieldEnum = {
   zipcode: 'zipcode',
   country: 'country',
   otherCountry: 'otherCountry',
+  mixId: 'mixId',
   ipHash: 'ipHash',
   createdAt: 'createdAt'
 } as const
 
 export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
-
-
-export const VoteItemScalarFieldEnum = {
-  id: 'id',
-  voteId: 'voteId',
-  songId: 'songId',
-  points: 'points'
-} as const
-
-export type VoteItemScalarFieldEnum = (typeof VoteItemScalarFieldEnum)[keyof typeof VoteItemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -731,20 +645,6 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 /**
  * Field references
  */
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
 
 
 /**
@@ -790,16 +690,16 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Float'
+ * Reference to a field of type 'Int'
  */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
 /**
- * Reference to a field of type 'Float[]'
+ * Reference to a field of type 'Int[]'
  */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 /**
@@ -897,9 +797,8 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
-  song?: Prisma.SongOmit
+  mix?: Prisma.MixOmit
   vote?: Prisma.VoteOmit
-  voteItem?: Prisma.VoteItemOmit
 }
 
 /* Types for Logging */

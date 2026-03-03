@@ -51,9 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Song: 'Song',
-  Vote: 'Vote',
-  VoteItem: 'VoteItem'
+  Mix: 'Mix',
+  Vote: 'Vote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -72,14 +71,12 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const SongScalarFieldEnum = {
+export const MixScalarFieldEnum = {
   id: 'id',
-  artist: 'artist',
-  title: 'title',
-  year: 'year'
+  artist: 'artist'
 } as const
 
-export type SongScalarFieldEnum = (typeof SongScalarFieldEnum)[keyof typeof SongScalarFieldEnum]
+export type MixScalarFieldEnum = (typeof MixScalarFieldEnum)[keyof typeof MixScalarFieldEnum]
 
 
 export const VoteScalarFieldEnum = {
@@ -91,21 +88,12 @@ export const VoteScalarFieldEnum = {
   zipcode: 'zipcode',
   country: 'country',
   otherCountry: 'otherCountry',
+  mixId: 'mixId',
   ipHash: 'ipHash',
   createdAt: 'createdAt'
 } as const
 
 export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
-
-
-export const VoteItemScalarFieldEnum = {
-  id: 'id',
-  voteId: 'voteId',
-  songId: 'songId',
-  points: 'points'
-} as const
-
-export type VoteItemScalarFieldEnum = (typeof VoteItemScalarFieldEnum)[keyof typeof VoteItemScalarFieldEnum]
 
 
 export const SortOrder = {

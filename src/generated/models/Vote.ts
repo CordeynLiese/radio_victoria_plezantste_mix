@@ -33,6 +33,7 @@ export type VoteMinAggregateOutputType = {
   zipcode: string | null
   country: $Enums.Country | null
   otherCountry: string | null
+  mixId: string | null
   ipHash: string | null
   createdAt: Date | null
 }
@@ -46,6 +47,7 @@ export type VoteMaxAggregateOutputType = {
   zipcode: string | null
   country: $Enums.Country | null
   otherCountry: string | null
+  mixId: string | null
   ipHash: string | null
   createdAt: Date | null
 }
@@ -59,6 +61,7 @@ export type VoteCountAggregateOutputType = {
   zipcode: number
   country: number
   otherCountry: number
+  mixId: number
   ipHash: number
   createdAt: number
   _all: number
@@ -74,6 +77,7 @@ export type VoteMinAggregateInputType = {
   zipcode?: true
   country?: true
   otherCountry?: true
+  mixId?: true
   ipHash?: true
   createdAt?: true
 }
@@ -87,6 +91,7 @@ export type VoteMaxAggregateInputType = {
   zipcode?: true
   country?: true
   otherCountry?: true
+  mixId?: true
   ipHash?: true
   createdAt?: true
 }
@@ -100,6 +105,7 @@ export type VoteCountAggregateInputType = {
   zipcode?: true
   country?: true
   otherCountry?: true
+  mixId?: true
   ipHash?: true
   createdAt?: true
   _all?: true
@@ -186,6 +192,7 @@ export type VoteGroupByOutputType = {
   zipcode: string
   country: $Enums.Country
   otherCountry: string | null
+  mixId: string
   ipHash: string
   createdAt: Date
   _count: VoteCountAggregateOutputType | null
@@ -220,9 +227,10 @@ export type VoteWhereInput = {
   zipcode?: Prisma.StringFilter<"Vote"> | string
   country?: Prisma.EnumCountryFilter<"Vote"> | $Enums.Country
   otherCountry?: Prisma.StringNullableFilter<"Vote"> | string | null
+  mixId?: Prisma.StringFilter<"Vote"> | string
   ipHash?: Prisma.StringFilter<"Vote"> | string
   createdAt?: Prisma.DateTimeFilter<"Vote"> | Date | string
-  voteItems?: Prisma.VoteItemListRelationFilter
+  mix?: Prisma.XOR<Prisma.MixScalarRelationFilter, Prisma.MixWhereInput>
 }
 
 export type VoteOrderByWithRelationInput = {
@@ -234,9 +242,10 @@ export type VoteOrderByWithRelationInput = {
   zipcode?: Prisma.SortOrder
   country?: Prisma.SortOrder
   otherCountry?: Prisma.SortOrderInput | Prisma.SortOrder
+  mixId?: Prisma.SortOrder
   ipHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  voteItems?: Prisma.VoteItemOrderByRelationAggregateInput
+  mix?: Prisma.MixOrderByWithRelationInput
 }
 
 export type VoteWhereUniqueInput = Prisma.AtLeast<{
@@ -251,9 +260,10 @@ export type VoteWhereUniqueInput = Prisma.AtLeast<{
   zipcode?: Prisma.StringFilter<"Vote"> | string
   country?: Prisma.EnumCountryFilter<"Vote"> | $Enums.Country
   otherCountry?: Prisma.StringNullableFilter<"Vote"> | string | null
+  mixId?: Prisma.StringFilter<"Vote"> | string
   ipHash?: Prisma.StringFilter<"Vote"> | string
   createdAt?: Prisma.DateTimeFilter<"Vote"> | Date | string
-  voteItems?: Prisma.VoteItemListRelationFilter
+  mix?: Prisma.XOR<Prisma.MixScalarRelationFilter, Prisma.MixWhereInput>
 }, "id" | "emailNormalized">
 
 export type VoteOrderByWithAggregationInput = {
@@ -265,6 +275,7 @@ export type VoteOrderByWithAggregationInput = {
   zipcode?: Prisma.SortOrder
   country?: Prisma.SortOrder
   otherCountry?: Prisma.SortOrderInput | Prisma.SortOrder
+  mixId?: Prisma.SortOrder
   ipHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.VoteCountOrderByAggregateInput
@@ -284,6 +295,7 @@ export type VoteScalarWhereWithAggregatesInput = {
   zipcode?: Prisma.StringWithAggregatesFilter<"Vote"> | string
   country?: Prisma.EnumCountryWithAggregatesFilter<"Vote"> | $Enums.Country
   otherCountry?: Prisma.StringNullableWithAggregatesFilter<"Vote"> | string | null
+  mixId?: Prisma.StringWithAggregatesFilter<"Vote"> | string
   ipHash?: Prisma.StringWithAggregatesFilter<"Vote"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Vote"> | Date | string
 }
@@ -299,7 +311,7 @@ export type VoteCreateInput = {
   otherCountry?: string | null
   ipHash: string
   createdAt?: Date | string
-  voteItems?: Prisma.VoteItemCreateNestedManyWithoutVoteInput
+  mix: Prisma.MixCreateNestedOneWithoutVotesInput
 }
 
 export type VoteUncheckedCreateInput = {
@@ -311,9 +323,9 @@ export type VoteUncheckedCreateInput = {
   zipcode: string
   country: $Enums.Country
   otherCountry?: string | null
+  mixId: string
   ipHash: string
   createdAt?: Date | string
-  voteItems?: Prisma.VoteItemUncheckedCreateNestedManyWithoutVoteInput
 }
 
 export type VoteUpdateInput = {
@@ -327,7 +339,7 @@ export type VoteUpdateInput = {
   otherCountry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  voteItems?: Prisma.VoteItemUpdateManyWithoutVoteNestedInput
+  mix?: Prisma.MixUpdateOneRequiredWithoutVotesNestedInput
 }
 
 export type VoteUncheckedUpdateInput = {
@@ -339,9 +351,9 @@ export type VoteUncheckedUpdateInput = {
   zipcode?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   otherCountry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mixId?: Prisma.StringFieldUpdateOperationsInput | string
   ipHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  voteItems?: Prisma.VoteItemUncheckedUpdateManyWithoutVoteNestedInput
 }
 
 export type VoteCreateManyInput = {
@@ -353,6 +365,7 @@ export type VoteCreateManyInput = {
   zipcode: string
   country: $Enums.Country
   otherCountry?: string | null
+  mixId: string
   ipHash: string
   createdAt?: Date | string
 }
@@ -379,8 +392,19 @@ export type VoteUncheckedUpdateManyInput = {
   zipcode?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   otherCountry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mixId?: Prisma.StringFieldUpdateOperationsInput | string
   ipHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type VoteListRelationFilter = {
+  every?: Prisma.VoteWhereInput
+  some?: Prisma.VoteWhereInput
+  none?: Prisma.VoteWhereInput
+}
+
+export type VoteOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type VoteCountOrderByAggregateInput = {
@@ -392,6 +416,7 @@ export type VoteCountOrderByAggregateInput = {
   zipcode?: Prisma.SortOrder
   country?: Prisma.SortOrder
   otherCountry?: Prisma.SortOrder
+  mixId?: Prisma.SortOrder
   ipHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -405,6 +430,7 @@ export type VoteMaxOrderByAggregateInput = {
   zipcode?: Prisma.SortOrder
   country?: Prisma.SortOrder
   otherCountry?: Prisma.SortOrder
+  mixId?: Prisma.SortOrder
   ipHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -418,13 +444,51 @@ export type VoteMinOrderByAggregateInput = {
   zipcode?: Prisma.SortOrder
   country?: Prisma.SortOrder
   otherCountry?: Prisma.SortOrder
+  mixId?: Prisma.SortOrder
   ipHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
-export type VoteScalarRelationFilter = {
-  is?: Prisma.VoteWhereInput
-  isNot?: Prisma.VoteWhereInput
+export type VoteCreateNestedManyWithoutMixInput = {
+  create?: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput> | Prisma.VoteCreateWithoutMixInput[] | Prisma.VoteUncheckedCreateWithoutMixInput[]
+  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutMixInput | Prisma.VoteCreateOrConnectWithoutMixInput[]
+  createMany?: Prisma.VoteCreateManyMixInputEnvelope
+  connect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+}
+
+export type VoteUncheckedCreateNestedManyWithoutMixInput = {
+  create?: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput> | Prisma.VoteCreateWithoutMixInput[] | Prisma.VoteUncheckedCreateWithoutMixInput[]
+  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutMixInput | Prisma.VoteCreateOrConnectWithoutMixInput[]
+  createMany?: Prisma.VoteCreateManyMixInputEnvelope
+  connect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+}
+
+export type VoteUpdateManyWithoutMixNestedInput = {
+  create?: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput> | Prisma.VoteCreateWithoutMixInput[] | Prisma.VoteUncheckedCreateWithoutMixInput[]
+  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutMixInput | Prisma.VoteCreateOrConnectWithoutMixInput[]
+  upsert?: Prisma.VoteUpsertWithWhereUniqueWithoutMixInput | Prisma.VoteUpsertWithWhereUniqueWithoutMixInput[]
+  createMany?: Prisma.VoteCreateManyMixInputEnvelope
+  set?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  disconnect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  delete?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  connect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  update?: Prisma.VoteUpdateWithWhereUniqueWithoutMixInput | Prisma.VoteUpdateWithWhereUniqueWithoutMixInput[]
+  updateMany?: Prisma.VoteUpdateManyWithWhereWithoutMixInput | Prisma.VoteUpdateManyWithWhereWithoutMixInput[]
+  deleteMany?: Prisma.VoteScalarWhereInput | Prisma.VoteScalarWhereInput[]
+}
+
+export type VoteUncheckedUpdateManyWithoutMixNestedInput = {
+  create?: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput> | Prisma.VoteCreateWithoutMixInput[] | Prisma.VoteUncheckedCreateWithoutMixInput[]
+  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutMixInput | Prisma.VoteCreateOrConnectWithoutMixInput[]
+  upsert?: Prisma.VoteUpsertWithWhereUniqueWithoutMixInput | Prisma.VoteUpsertWithWhereUniqueWithoutMixInput[]
+  createMany?: Prisma.VoteCreateManyMixInputEnvelope
+  set?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  disconnect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  delete?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  connect?: Prisma.VoteWhereUniqueInput | Prisma.VoteWhereUniqueInput[]
+  update?: Prisma.VoteUpdateWithWhereUniqueWithoutMixInput | Prisma.VoteUpdateWithWhereUniqueWithoutMixInput[]
+  updateMany?: Prisma.VoteUpdateManyWithWhereWithoutMixInput | Prisma.VoteUpdateManyWithWhereWithoutMixInput[]
+  deleteMany?: Prisma.VoteScalarWhereInput | Prisma.VoteScalarWhereInput[]
 }
 
 export type EnumCountryFieldUpdateOperationsInput = {
@@ -439,21 +503,7 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type VoteCreateNestedOneWithoutVoteItemsInput = {
-  create?: Prisma.XOR<Prisma.VoteCreateWithoutVoteItemsInput, Prisma.VoteUncheckedCreateWithoutVoteItemsInput>
-  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutVoteItemsInput
-  connect?: Prisma.VoteWhereUniqueInput
-}
-
-export type VoteUpdateOneRequiredWithoutVoteItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.VoteCreateWithoutVoteItemsInput, Prisma.VoteUncheckedCreateWithoutVoteItemsInput>
-  connectOrCreate?: Prisma.VoteCreateOrConnectWithoutVoteItemsInput
-  upsert?: Prisma.VoteUpsertWithoutVoteItemsInput
-  connect?: Prisma.VoteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VoteUpdateToOneWithWhereWithoutVoteItemsInput, Prisma.VoteUpdateWithoutVoteItemsInput>, Prisma.VoteUncheckedUpdateWithoutVoteItemsInput>
-}
-
-export type VoteCreateWithoutVoteItemsInput = {
+export type VoteCreateWithoutMixInput = {
   id?: string
   email: string
   emailNormalized: string
@@ -466,7 +516,7 @@ export type VoteCreateWithoutVoteItemsInput = {
   createdAt?: Date | string
 }
 
-export type VoteUncheckedCreateWithoutVoteItemsInput = {
+export type VoteUncheckedCreateWithoutMixInput = {
   id?: string
   email: string
   emailNormalized: string
@@ -479,23 +529,63 @@ export type VoteUncheckedCreateWithoutVoteItemsInput = {
   createdAt?: Date | string
 }
 
-export type VoteCreateOrConnectWithoutVoteItemsInput = {
+export type VoteCreateOrConnectWithoutMixInput = {
   where: Prisma.VoteWhereUniqueInput
-  create: Prisma.XOR<Prisma.VoteCreateWithoutVoteItemsInput, Prisma.VoteUncheckedCreateWithoutVoteItemsInput>
+  create: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput>
 }
 
-export type VoteUpsertWithoutVoteItemsInput = {
-  update: Prisma.XOR<Prisma.VoteUpdateWithoutVoteItemsInput, Prisma.VoteUncheckedUpdateWithoutVoteItemsInput>
-  create: Prisma.XOR<Prisma.VoteCreateWithoutVoteItemsInput, Prisma.VoteUncheckedCreateWithoutVoteItemsInput>
-  where?: Prisma.VoteWhereInput
+export type VoteCreateManyMixInputEnvelope = {
+  data: Prisma.VoteCreateManyMixInput | Prisma.VoteCreateManyMixInput[]
+  skipDuplicates?: boolean
 }
 
-export type VoteUpdateToOneWithWhereWithoutVoteItemsInput = {
-  where?: Prisma.VoteWhereInput
-  data: Prisma.XOR<Prisma.VoteUpdateWithoutVoteItemsInput, Prisma.VoteUncheckedUpdateWithoutVoteItemsInput>
+export type VoteUpsertWithWhereUniqueWithoutMixInput = {
+  where: Prisma.VoteWhereUniqueInput
+  update: Prisma.XOR<Prisma.VoteUpdateWithoutMixInput, Prisma.VoteUncheckedUpdateWithoutMixInput>
+  create: Prisma.XOR<Prisma.VoteCreateWithoutMixInput, Prisma.VoteUncheckedCreateWithoutMixInput>
 }
 
-export type VoteUpdateWithoutVoteItemsInput = {
+export type VoteUpdateWithWhereUniqueWithoutMixInput = {
+  where: Prisma.VoteWhereUniqueInput
+  data: Prisma.XOR<Prisma.VoteUpdateWithoutMixInput, Prisma.VoteUncheckedUpdateWithoutMixInput>
+}
+
+export type VoteUpdateManyWithWhereWithoutMixInput = {
+  where: Prisma.VoteScalarWhereInput
+  data: Prisma.XOR<Prisma.VoteUpdateManyMutationInput, Prisma.VoteUncheckedUpdateManyWithoutMixInput>
+}
+
+export type VoteScalarWhereInput = {
+  AND?: Prisma.VoteScalarWhereInput | Prisma.VoteScalarWhereInput[]
+  OR?: Prisma.VoteScalarWhereInput[]
+  NOT?: Prisma.VoteScalarWhereInput | Prisma.VoteScalarWhereInput[]
+  id?: Prisma.StringFilter<"Vote"> | string
+  email?: Prisma.StringFilter<"Vote"> | string
+  emailNormalized?: Prisma.StringFilter<"Vote"> | string
+  name?: Prisma.StringFilter<"Vote"> | string
+  city?: Prisma.StringFilter<"Vote"> | string
+  zipcode?: Prisma.StringFilter<"Vote"> | string
+  country?: Prisma.EnumCountryFilter<"Vote"> | $Enums.Country
+  otherCountry?: Prisma.StringNullableFilter<"Vote"> | string | null
+  mixId?: Prisma.StringFilter<"Vote"> | string
+  ipHash?: Prisma.StringFilter<"Vote"> | string
+  createdAt?: Prisma.DateTimeFilter<"Vote"> | Date | string
+}
+
+export type VoteCreateManyMixInput = {
+  id?: string
+  email: string
+  emailNormalized: string
+  name: string
+  city: string
+  zipcode: string
+  country: $Enums.Country
+  otherCountry?: string | null
+  ipHash: string
+  createdAt?: Date | string
+}
+
+export type VoteUpdateWithoutMixInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailNormalized?: Prisma.StringFieldUpdateOperationsInput | string
@@ -508,7 +598,7 @@ export type VoteUpdateWithoutVoteItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type VoteUncheckedUpdateWithoutVoteItemsInput = {
+export type VoteUncheckedUpdateWithoutMixInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailNormalized?: Prisma.StringFieldUpdateOperationsInput | string
@@ -521,35 +611,19 @@ export type VoteUncheckedUpdateWithoutVoteItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type VoteCountOutputType
- */
-
-export type VoteCountOutputType = {
-  voteItems: number
+export type VoteUncheckedUpdateManyWithoutMixInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  zipcode?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  otherCountry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type VoteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voteItems?: boolean | VoteCountOutputTypeCountVoteItemsArgs
-}
-
-/**
- * VoteCountOutputType without action
- */
-export type VoteCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VoteCountOutputType
-   */
-  select?: Prisma.VoteCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * VoteCountOutputType without action
- */
-export type VoteCountOutputTypeCountVoteItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VoteItemWhereInput
-}
 
 
 export type VoteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -561,10 +635,10 @@ export type VoteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   zipcode?: boolean
   country?: boolean
   otherCountry?: boolean
+  mixId?: boolean
   ipHash?: boolean
   createdAt?: boolean
-  voteItems?: boolean | Prisma.Vote$voteItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.VoteCountOutputTypeDefaultArgs<ExtArgs>
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vote"]>
 
 export type VoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -576,8 +650,10 @@ export type VoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   zipcode?: boolean
   country?: boolean
   otherCountry?: boolean
+  mixId?: boolean
   ipHash?: boolean
   createdAt?: boolean
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vote"]>
 
 export type VoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -589,8 +665,10 @@ export type VoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   zipcode?: boolean
   country?: boolean
   otherCountry?: boolean
+  mixId?: boolean
   ipHash?: boolean
   createdAt?: boolean
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vote"]>
 
 export type VoteSelectScalar = {
@@ -602,22 +680,26 @@ export type VoteSelectScalar = {
   zipcode?: boolean
   country?: boolean
   otherCountry?: boolean
+  mixId?: boolean
   ipHash?: boolean
   createdAt?: boolean
 }
 
-export type VoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailNormalized" | "name" | "city" | "zipcode" | "country" | "otherCountry" | "ipHash" | "createdAt", ExtArgs["result"]["vote"]>
+export type VoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailNormalized" | "name" | "city" | "zipcode" | "country" | "otherCountry" | "mixId" | "ipHash" | "createdAt", ExtArgs["result"]["vote"]>
 export type VoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voteItems?: boolean | Prisma.Vote$voteItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.VoteCountOutputTypeDefaultArgs<ExtArgs>
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
 }
-export type VoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type VoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type VoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
+}
+export type VoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  mix?: boolean | Prisma.MixDefaultArgs<ExtArgs>
+}
 
 export type $VotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vote"
   objects: {
-    voteItems: Prisma.$VoteItemPayload<ExtArgs>[]
+    mix: Prisma.$MixPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -628,6 +710,7 @@ export type $VotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     zipcode: string
     country: $Enums.Country
     otherCountry: string | null
+    mixId: string
     ipHash: string
     createdAt: Date
   }, ExtArgs["result"]["vote"]>
@@ -1024,7 +1107,7 @@ readonly fields: VoteFieldRefs;
  */
 export interface Prisma__VoteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  voteItems<T extends Prisma.Vote$voteItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vote$voteItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoteItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mix<T extends Prisma.MixDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MixDefaultArgs<ExtArgs>>): Prisma.Prisma__MixClient<runtime.Types.Result.GetResult<Prisma.$MixPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1062,6 +1145,7 @@ export interface VoteFieldRefs {
   readonly zipcode: Prisma.FieldRef<"Vote", 'String'>
   readonly country: Prisma.FieldRef<"Vote", 'Country'>
   readonly otherCountry: Prisma.FieldRef<"Vote", 'String'>
+  readonly mixId: Prisma.FieldRef<"Vote", 'String'>
   readonly ipHash: Prisma.FieldRef<"Vote", 'String'>
   readonly createdAt: Prisma.FieldRef<"Vote", 'DateTime'>
 }
@@ -1313,6 +1397,10 @@ export type VoteCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.VoteCreateManyInput | Prisma.VoteCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoteIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1383,6 +1471,10 @@ export type VoteUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Votes to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoteIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1449,30 +1541,6 @@ export type VoteDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Votes to delete.
    */
   limit?: number
-}
-
-/**
- * Vote.voteItems
- */
-export type Vote$voteItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VoteItem
-   */
-  select?: Prisma.VoteItemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the VoteItem
-   */
-  omit?: Prisma.VoteItemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VoteItemInclude<ExtArgs> | null
-  where?: Prisma.VoteItemWhereInput
-  orderBy?: Prisma.VoteItemOrderByWithRelationInput | Prisma.VoteItemOrderByWithRelationInput[]
-  cursor?: Prisma.VoteItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VoteItemScalarFieldEnum | Prisma.VoteItemScalarFieldEnum[]
 }
 
 /**

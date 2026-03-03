@@ -29,8 +29,8 @@ export * from "./enums"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Songs
- * const songs = await prisma.song.findMany()
+ * // Fetch zero or more Mixes
+ * const mixes = await prisma.mix.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,17 +40,12 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Song
+ * Model Mix
  * 
  */
-export type Song = Prisma.SongModel
+export type Mix = Prisma.MixModel
 /**
  * Model Vote
  * 
  */
 export type Vote = Prisma.VoteModel
-/**
- * Model VoteItem
- * 
- */
-export type VoteItem = Prisma.VoteItemModel

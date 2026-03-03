@@ -14,36 +14,34 @@ export const GET = async (req: NextRequest) => {
   }
 
   try {
-    const ranking = await prisma.voteItem.groupBy({
-      by: ["songId"],
-      _sum: {
-        points: true,
+    const results = await prisma.vote.groupBy({
+      by: ["mixId"],
+      _count: {
+        id: true,
       },
       orderBy: {
-        _sum: {
-          points: "desc",
+        _count: {
+          id: "desc",
         },
       },
     });
 
-    // Include song info
-    const songIds = ranking.map((r) => r.songId);
-    const songs = await prisma.song.findMany({
-      where: { id: { in: songIds } },
+    // Include mix info
+    const mixIds = results.map((r) => r.mixId);
+    const mixes = await prisma.mix.findMany({
+      where: { id: { in: mixIds } },
     });
 
-    const results = ranking.map((r) => {
-      const song = songs.find((s) => s.id === r.songId);
+    const formattedResults = results.map((r) => {
+      const mix = mixes.find((m) => m.id === r.mixId);
       return {
-        songId: r.songId,
-        title: song?.title,
-        artist: song?.artist,
-        year: song?.year,
-        totalPoints: r._sum.points,
+        mixId: r.mixId,
+        artist: mix?.artist,
+        voteCount: r._count.id,
       };
     });
 
-    return NextResponse.json(results);
+    return NextResponse.json(formattedResults);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

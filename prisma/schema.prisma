@@ -7,13 +7,15 @@ datasource db {
   provider = "postgresql" // or "postgresql", etc.
 }
 
-model Song {
-  id     Int    @id
+model Mix {
+  id     String @id @default(cuid())
   artist String
-  title  String
-  year   Int
 
-  voteItems VoteItem[]
+  // we only need the artist name for each mix now; the title field was
+  // removed as part of simplifying the data model. existing migrations
+  // include the column but future runs will drop it.
+
+  votes Vote[]
 }
 
 model Vote {
@@ -28,26 +30,15 @@ model Vote {
   country      Country
   otherCountry String?
 
+  mixId String
+  mix   Mix    @relation(fields: [mixId], references: [id], onDelete: Cascade)
+
   ipHash    String
   createdAt DateTime @default(now())
 
-  voteItems VoteItem[]
-
   @@unique([emailNormalized])
   @@index([ipHash])
-}
-
-model VoteItem {
-  id String @id @default(cuid())
-
-  voteId String
-  songId Int
-  points Int
-
-  vote Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)
-  song Song @relation(fields: [songId], references: [id])
-
-  @@unique([voteId, songId])
+  @@index([mixId])
 }
 
 enum Country {

@@ -3,16 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { voteSchema } from "@/server/validators/vote";
 import { hashIp } from "@/lib/ip";
 import { normalizeEmail } from "@/lib/normalizeEmail";
-import { Prisma } from "@/generated/client";
 import { isAuthorized } from "@/lib/apiAuth";
-
-const pointsByRank: Record<number, number> = {
-  1: 5,
-  2: 4,
-  3: 3,
-  4: 2,
-  5: 1,
-};
 
 export const POST = async (req: NextRequest) => {
   if (!isAuthorized(req)) {
@@ -27,7 +18,7 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
 
-    const { email, name, city, postalCode, country, otherCountry, rankings } =
+    const { email, name, city, postalCode, country, otherCountry, mixId } =
       parsed.data;
 
     /* -----------------------------
@@ -48,7 +39,7 @@ export const POST = async (req: NextRequest) => {
 
     if (ipVoteCount >= 5) {
       return NextResponse.json(
-        { error: "Oops, je hebt al eens gestemd!" },
+        { error: "Oops, je hebt al te veel gestemd vanop dit IP-adres!" },
         { status: 429 },
       );
     }
@@ -68,29 +59,20 @@ export const POST = async (req: NextRequest) => {
     }
 
     /* -----------------------------
-     * Persist vote + rankings
+     * Persist vote
      * ----------------------------- */
-    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-      const vote = await tx.vote.create({
-        data: {
-          email,
-          emailNormalized,
-          name,
-          city,
-          zipcode: postalCode,
-          country,
-          otherCountry: country === "OTHER" ? otherCountry : null,
-          ipHash,
-        },
-      });
-
-      await tx.voteItem.createMany({
-        data: rankings.map((ranking) => ({
-          voteId: vote.id,
-          songId: ranking.songId,
-          points: pointsByRank[ranking.rank],
-        })),
-      });
+    await prisma.vote.create({
+      data: {
+        email,
+        emailNormalized,
+        name,
+        city,
+        zipcode: postalCode,
+        country,
+        otherCountry: country === "OTHER" ? otherCountry : null,
+        ipHash,
+        mixId,
+      },
     });
 
     return NextResponse.json({ success: true });

@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\" // or \"postgresql\", etc.\n}\n\nmodel Song {\n  id     Int    @id\n  artist String\n  title  String\n  year   Int\n\n  voteItems VoteItem[]\n}\n\nmodel Vote {\n  id String @id @default(cuid())\n\n  email           String\n  emailNormalized String\n  name            String\n  city            String\n  zipcode         String\n\n  country      Country\n  otherCountry String?\n\n  ipHash    String\n  createdAt DateTime @default(now())\n\n  voteItems VoteItem[]\n\n  @@unique([emailNormalized])\n  @@index([ipHash])\n}\n\nmodel VoteItem {\n  id String @id @default(cuid())\n\n  voteId String\n  songId Int\n  points Int\n\n  vote Vote @relation(fields: [voteId], references: [id], onDelete: Cascade)\n  song Song @relation(fields: [songId], references: [id])\n\n  @@unique([voteId, songId])\n}\n\nenum Country {\n  BELGIUM\n  OTHER\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\" // or \"postgresql\", etc.\n}\n\nmodel Mix {\n  id     String @id @default(cuid())\n  artist String\n\n  // we only need the artist name for each mix now; the title field was\n  // removed as part of simplifying the data model. existing migrations\n  // include the column but future runs will drop it.\n\n  votes Vote[]\n}\n\nmodel Vote {\n  id String @id @default(cuid())\n\n  email           String\n  emailNormalized String\n  name            String\n  city            String\n  zipcode         String\n\n  country      Country\n  otherCountry String?\n\n  mixId String\n  mix   Mix    @relation(fields: [mixId], references: [id], onDelete: Cascade)\n\n  ipHash    String\n  createdAt DateTime @default(now())\n\n  @@unique([emailNormalized])\n  @@index([ipHash])\n  @@index([mixId])\n}\n\nenum Country {\n  BELGIUM\n  OTHER\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Song\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"artist\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"voteItems\",\"kind\":\"object\",\"type\":\"VoteItem\",\"relationName\":\"SongToVoteItem\"}],\"dbName\":null},\"Vote\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailNormalized\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipcode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"enum\",\"type\":\"Country\"},{\"name\":\"otherCountry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"voteItems\",\"kind\":\"object\",\"type\":\"VoteItem\",\"relationName\":\"VoteToVoteItem\"}],\"dbName\":null},\"VoteItem\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"voteId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"songId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"points\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"vote\",\"kind\":\"object\",\"type\":\"Vote\",\"relationName\":\"VoteToVoteItem\"},{\"name\":\"song\",\"kind\":\"object\",\"type\":\"Song\",\"relationName\":\"SongToVoteItem\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Mix\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"artist\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"votes\",\"kind\":\"object\",\"type\":\"Vote\",\"relationName\":\"MixToVote\"}],\"dbName\":null},\"Vote\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailNormalized\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipcode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"enum\",\"type\":\"Country\"},{\"name\":\"otherCountry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mixId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mix\",\"kind\":\"object\",\"type\":\"Mix\",\"relationName\":\"MixToVote\"},{\"name\":\"ipHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -58,8 +58,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Songs
-   * const songs = await prisma.song.findMany()
+   * // Fetch zero or more Mixes
+   * const mixes = await prisma.mix.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -80,8 +80,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Songs
- * const songs = await prisma.song.findMany()
+ * // Fetch zero or more Mixes
+ * const mixes = await prisma.mix.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -175,14 +175,14 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.song`: Exposes CRUD operations for the **Song** model.
+   * `prisma.mix`: Exposes CRUD operations for the **Mix** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Songs
-    * const songs = await prisma.song.findMany()
+    * // Fetch zero or more Mixes
+    * const mixes = await prisma.mix.findMany()
     * ```
     */
-  get song(): Prisma.SongDelegate<ExtArgs, { omit: OmitOpts }>;
+  get mix(): Prisma.MixDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
    * `prisma.vote`: Exposes CRUD operations for the **Vote** model.
@@ -193,16 +193,6 @@ export interface PrismaClient<
     * ```
     */
   get vote(): Prisma.VoteDelegate<ExtArgs, { omit: OmitOpts }>;
-
-  /**
-   * `prisma.voteItem`: Exposes CRUD operations for the **VoteItem** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more VoteItems
-    * const voteItems = await prisma.voteItem.findMany()
-    * ```
-    */
-  get voteItem(): Prisma.VoteItemDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
